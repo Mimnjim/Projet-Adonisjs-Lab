@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion du matériel</title>
+</head>
+<body>
+  <h1>Gestion du matériel</h1>
+
+  <h2>Ajouter du matériel</h2>
+
+  <form action="/materials" method="POST">
+    {{ csrfField() }}
+    <div>
+      <label for="name">Nom du matériel</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        placeholder="Ex. : Appareil photo Canon"
+        required
+      >
+    </div>
+
+    <div>
+      <label for="category">Catégorie</label>
+      <input
+        type="text"
+        id="category"
+        name="category"
+        placeholder="Ex. : Photo"
+        required
+      >
+    </div>
+
+    <div>
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        name="description"
+        placeholder="Décris le matériel (facultatif)"
+      ></textarea>
+    </div>
+
+    <div>
+      <label for="quantity">Quantité</label>
+      <input
+        type="number"
+        id="quantity"
+        name="quantity"
+        min="1"
+        value="1"
+        required
+      >
+    </div>
+
+    <button type="submit">Ajouter le matériel</button>
+  </form>
+
+  <hr>
+
+  <h2>Matériel disponible</h2>
+
+  @if (materials.length === 0)
+    <p>Aucun matériel enregistré pour le moment.</p>
+  @else
+    <ul>
+      @each (material in materials)
+        <li>
+          <strong>{{ material.name }}</strong>
+          — Catégorie : {{ material.category }}
+          — Quantité : {{ material.quantity }}
+
+          @if (material.description)
+            <p>{{ material.description }}</p>
+          @endif
+        </li>
+      @endeach
+    </ul>
+  @endif
+</body>
+</html>
