@@ -76,6 +76,14 @@
           @if (material.description)
             <p>{{ material.description }}</p>
           @endif
+          
+        <form action="/materials/{{ material.id }}/delete" method="POST">
+            {{ csrfField() }}
+            <button type="submit" onclick="return confirm('Voulez-vous vraiment supprimer ce matériel ?')">
+                Supprimer
+            </button>
+        </form>
+
         </li>
       @endeach
     </ul>

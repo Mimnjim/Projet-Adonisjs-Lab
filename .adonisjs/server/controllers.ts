@@ -6,5 +6,6 @@
 export const controllers = {
   Materials: () => import('#controllers/materials_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
+  Reservations: () => import('#controllers/reservations_controller'),
   Session: () => import('#controllers/session_controller'),
 }

@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Réservation de matériel</title>
+</head>
+<body>
+  <h1>Réservation de matériel</h1>
+  
+    @if (flashMessages.has('success'))
+    <p>{{ flashMessages.get('success') }}</p>
+    @endif
+
+    @if (flashMessages.has('error'))
+    <p>{{ flashMessages.get('error') }}</p>
+    @endif
+
+  <h2>Nouvelle réservation</h2>
+
+  <form action="/reservations" method="POST">
+    {{ csrfField() }}
+
+    <div>
+      <label for="material_id">Matériel à réserver</label>
+      <select id="material_id" name="material_id" required>
+        <option value="">Choisir un matériel</option>
+        @each (material in materials)
+          <option value="{{ material.id }}">
+            {{ material.name }} (quantité disponible : {{ material.quantity }})
+          </option>
+        @endeach
+      </select>
+    </div>
+
+    <div>
+      <label for="borrower_name">Nom du demandeur</label>
+      <input
+        type="text"
+        id="borrower_name"
+        name="borrower_name"
+        required
+      >
+    </div>
+
+    <div>
+      <label for="start_date">Date de début</label>
+      <input type="date" id="start_date" name="start_date" required>
+    </div>
+
+    <div>
+      <label for="end_date">Date de fin</label>
+      <input type="date" id="end_date" name="end_date" required>
+    </div>
+
+    <button type="submit">Réserver le matériel</button>
+  </form>
+
+  <hr>
+
+  <h2>Réservations enregistrées</h2>
+
+  @if (reservations.length === 0)
+    <p>Aucune réservation pour le moment.</p>
+  @else
+    <ul>
+      @each (reservation in reservations)
+        <li>
+          Matériel n° {{ reservation.materialId }}
+          — Réservé par {{ reservation.borrowerName }}
+          — Du {{ reservation.startDate.toISODate() }} au {{ reservation.endDate.toISODate() }}
+          — Statut : {{ reservation.status }}
+        </li>
+      @endeach
+    </ul>
+  @endif
+
+  <p><a href="/materials">Retour à la gestion du matériel</a></p>
+</body>
+</html>

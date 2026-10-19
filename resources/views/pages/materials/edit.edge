@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modifier le matériel</title>
+</head>
+<body>
+  <h1>Modifier le matériel</h1>
+
+  <form action="/materials/{{ material.id }}" method="POST">
+    {{ csrfField() }}
+
+    <div>
+      <label for="name">Nom du matériel</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        value="{{ material.name }}"
+        required
+      >
+    </div>
+
+    <div>
+      <label for="category">Catégorie</label>
+      <input
+        type="text"
+        id="category"
+        name="category"
+        value="{{ material.category }}"
+        required
+      >
+    </div>
+
+    <div>
+      <label for="description">Description</label>
+      <textarea id="description" name="description">{{ material.description || '' }}</textarea>
+    </div>
+
+    <div>
+      <label for="quantity">Quantité</label>
+      <input
+        type="number"
+        id="quantity"
+        name="quantity"
+        min="1"
+        value="{{ material.quantity }}"
+        required
+      >
+    </div>
+
+    <button type="submit">Enregistrer les modifications</button>
+  </form>
+
+  <p><a href="/materials">Retour à la liste du matériel</a></p>
+</body>
+</html>

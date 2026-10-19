@@ -26,6 +26,27 @@ export class MaterialSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class ReservationSchema extends BaseModel {
+  static $columns = ['borrowerName', 'createdAt', 'endDate', 'id', 'materialId', 'startDate', 'status', 'updatedAt'] as const
+  $columns = ReservationSchema.$columns
+  @column()
+  declare borrowerName: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column.date()
+  declare endDate: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare materialId: number
+  @column.date()
+  declare startDate: DateTime
+  @column()
+  declare status: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class UserSchema extends BaseModel {
   static $columns = ['createdAt', 'email', 'fullName', 'id', 'password', 'updatedAt'] as const
   $columns = UserSchema.$columns
