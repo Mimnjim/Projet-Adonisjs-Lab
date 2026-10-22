@@ -70,12 +70,13 @@
       <input type="date" id="end_date" name="end_date" required>
     </div>
 
-    <button type="submit">Réserver le matériel</button>
+    <button id="submit-reservation" type="submit">Réserver le matériel</button>
   </form>
 
   <hr>
 
   <h2>Réservations enregistrées</h2>
+
 
   @if (reservations.length === 0)
     <p>Aucune réservation pour le moment.</p>
@@ -83,15 +84,33 @@
     <ul>
       @each (reservation in reservations)
         <li>
-          Matériel n° {{ reservation.materialId }}
+          Matériel : {{ reservation.material.name }}
           — Quantité : {{ reservation.quantity }}
           — Réservé par {{ reservation.borrowerName }}
           — Du {{ reservation.startDate.toISODate() }} au {{ reservation.endDate.toISODate() }}
           — Statut : {{ reservation.status }}
+
+          @if (reservation.status !== 'cancelled')
+            <form
+              action="/reservations/{{ reservation.id }}/cancel"
+              method="POST"
+            >
+              {{ csrfField() }}
+              <button
+                type="submit"
+                onclick="return confirm('Voulez-vous vraiment annuler cette réservation ?')"
+              >
+                Annuler la réservation
+              </button>
+            </form>
+          @else
+            <p>Réservation annulée</p>
+          @endif
         </li>
       @endeach
     </ul>
   @endif
+
 
   <p><a href="/materials">Retour à la gestion du matériel</a></p>
 
@@ -102,6 +121,7 @@
     const endDateInput = document.getElementById('end_date')
     const quantityInput = document.getElementById('quantity')
     const availabilityMessage = document.getElementById('availability-message')
+    const submitButton = document.getElementById('submit-reservation')
 
     async function updateAvailability() {
       const materialId = materialInput.value
@@ -113,6 +133,7 @@
           'Choisissez un matériel et les dates pour connaître la disponibilité.'
         quantityInput.max = ''
         quantityInput.disabled = false
+        submitButton.disabled = false
         return
       }
 
@@ -121,6 +142,7 @@
           'La date de fin doit être postérieure ou égale à la date de début.'
         quantityInput.max = ''
         quantityInput.disabled = false
+        submitButton.disabled = false
         return
       }
 
@@ -142,11 +164,13 @@
             data.message || 'Impossible de vérifier la disponibilité.'
           quantityInput.max = ''
           quantityInput.disabled = false
+          submitButton.disabled = false
           return
         }
 
         
         if (data.availableQuantity === 0) {
+          submitButton.disabled = true
           availabilityMessage.textContent =
             'Aucun exemplaire disponible sur cette période.'
 
@@ -160,6 +184,7 @@
           `Quantité disponible sur cette période : ${data.availableQuantity}`
 
         quantityInput.disabled = false
+        submitButton.disabled = false
         quantityInput.max = data.availableQuantity
 
         if (Number(quantityInput.value) > data.availableQuantity) {
@@ -173,6 +198,7 @@
           'Erreur lors de la vérification de la disponibilité.'
         quantityInput.max = ''
         quantityInput.disabled = false
+        submitButton.disabled = false
       }
     }
 

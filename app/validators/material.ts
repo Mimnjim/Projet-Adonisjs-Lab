@@ -5,6 +5,6 @@ export const createMaterialValidator = vine.compile(
         name: vine.string().trim().minLength(2).maxLength(255), 
         category: vine.string().trim().minLength(2).maxLength(255),
         description: vine.string().trim().maxLength(1000).optional(),
-        quantity: vine.number().min(1).max(10000),
+        quantity: vine.number().withoutDecimals().min(1).max(10000),
     })
 )

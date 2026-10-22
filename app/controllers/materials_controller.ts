@@ -1,3 +1,4 @@
+import Reservation from '#models/reservation'
 import { createMaterialValidator } from '#validators/material'
 import Material from '#models/material'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -45,11 +46,26 @@ export default class MaterialsController {
     return response.redirect('/materials')
   }
 
-  async destroy({ params, response }: HttpContext) {
+  async destroy({ params, response, session }: HttpContext) {
     const material = await Material.findOrFail(params.id)
+
+    const activeReservation = await Reservation.query()
+      .where('material_id', material.id)
+      .whereNot('status', 'cancelled')
+      .first()
+
+    if (activeReservation) {
+      session.flash(
+        'error',
+        'Impossible de supprimer ce matériel : il possède encore des réservations actives.'
+      )
+
+      return response.redirect('/materials')
+    }
 
     await material.delete()
 
+    session.flash('success', 'Le matériel a bien été supprimé.')
     return response.redirect('/materials')
   }
 

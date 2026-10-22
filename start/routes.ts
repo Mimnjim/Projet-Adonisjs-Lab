@@ -25,6 +25,11 @@ router.get('/reservations/availability', [
   controllers.Reservations,
   'availability',
 ])
+router.post('/reservations/:id/cancel', [
+  controllers.Reservations,
+  'cancel',
+])
+
 
 router
   .group(() => {

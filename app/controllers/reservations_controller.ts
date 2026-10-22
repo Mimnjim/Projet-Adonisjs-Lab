@@ -8,7 +8,7 @@ export default class ReservationsController {
 
   async index({ view }: HttpContext) {
     const materials = await Material.all()
-    const reservations = await Reservation.all()
+    const reservations = await Reservation.query().preload('material')
 
     const materialsWithAvailability = await Promise.all(
       materials.map(async (material) => {
@@ -39,9 +39,11 @@ export default class ReservationsController {
 
   async store({ request, response, session }: HttpContext) {
     const data = await request.validateUsing(createReservationValidator)
+    const startDate = data.start_date.toISODate()!
+    const endDate = data.end_date.toISODate()!
 
     // Vérifier les dates
-    if (data.end_date < data.start_date) {
+    if (endDate < startDate) {
       session.flash(
         'error',
         'La date de fin doit être postérieure ou égale à la date de début.'
@@ -64,8 +66,8 @@ export default class ReservationsController {
     // Calculer la quantité déjà réservée sur cette période
     const reservedQuantity = await this.getReservedQuantity(
       material.id,
-      data.start_date,
-      data.end_date
+      startDate,
+      endDate
     )
 
     // Vérifier qu'il reste assez de matériel
@@ -81,8 +83,8 @@ export default class ReservationsController {
     await Reservation.create({
       materialId: material.id,
       borrowerName: data.borrower_name,
-      startDate: DateTime.fromISO(data.start_date),
-      endDate: DateTime.fromISO(data.end_date),
+      startDate: data.start_date,
+      endDate: data.end_date,
       quantity: data.quantity,
       status: 'pending',
     })
@@ -143,25 +145,44 @@ export default class ReservationsController {
 
 
 
+
   async availability({ request, response }: HttpContext) {
     const materialId = Number(request.input('material_id'))
     const startDate = request.input('start_date')
     const endDate = request.input('end_date')
 
+    // Vérifier les identifiants et les types reçus
     if (
       !Number.isInteger(materialId) ||
       materialId <= 0 ||
       typeof startDate !== 'string' ||
-      typeof endDate !== 'string' ||
-      endDate < startDate
+      typeof endDate !== 'string'
     ) {
       return response.badRequest({
         message: 'Veuillez choisir un matériel et une période valide.',
       })
     }
 
+    // Vérifier le format et l'existence réelle des dates
+    const parsedStartDate = DateTime.fromFormat(startDate, 'yyyy-MM-dd')
+    const parsedEndDate = DateTime.fromFormat(endDate, 'yyyy-MM-dd')
+
+    if (
+      !parsedStartDate.isValid ||
+      !parsedEndDate.isValid ||
+      parsedStartDate.toISODate() !== startDate ||
+      parsedEndDate.toISODate() !== endDate ||
+      endDate < startDate
+    ) {
+      return response.badRequest({
+        message: 'Veuillez choisir des dates réelles et une période valide.',
+      })
+    }
+
+    // Récupérer le matériel
     const material = await Material.findOrFail(materialId)
 
+    // Calculer le stock déjà réservé sur cette période
     const reservedQuantity = await this.getReservedQuantity(
       material.id,
       startDate,
@@ -176,6 +197,20 @@ export default class ReservationsController {
     })
   }
 
+  async cancel({ params, response, session }: HttpContext) {
+    const reservation = await Reservation.findOrFail(params.id)
+
+    if (reservation.status === 'cancelled') {
+      session.flash('error', 'Cette réservation est déjà annulée.')
+      return response.redirect('/reservations')
+    }
+
+    reservation.status = 'cancelled'
+    await reservation.save()
+
+    session.flash('success', 'La réservation a bien été annulée.')
+    return response.redirect('/reservations')
+  }
 
 
 }

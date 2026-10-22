@@ -8,6 +8,17 @@
 </head>
 <body>
   <h1>Gestion du matériel</h1>
+  @if (flashMessages.has('error'))
+    <div style="padding: 12px; margin: 12px 0; background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; border-radius: 6px;">
+      {{ flashMessages.get('error') }}
+    </div>
+  @endif
+
+  @if (flashMessages.has('success'))
+    <div style="padding: 12px; margin: 12px 0; background: #dcfce7; color: #166534; border: 1px solid #86efac; border-radius: 6px;">
+      {{ flashMessages.get('success') }}
+    </div>
+  @endif
 
   <h2>Ajouter du matériel</h2>
 
@@ -83,6 +94,10 @@
                 Supprimer
             </button>
         </form>
+
+        <a href="/materials/{{ material.id }}/edit">
+          Modifier
+        </a>
 
         </li>
       @endeach

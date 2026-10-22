@@ -13,6 +13,7 @@ export type ScannedRoutes = {
     'reservations.index': { paramsTuple?: []; params?: {} }
     'reservations.store': { paramsTuple?: []; params?: {} }
     'reservations.availability': { paramsTuple?: []; params?: {} }
+    'reservations.cancel': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
@@ -45,6 +46,7 @@ export type ScannedRoutes = {
     'materials.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'materials.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'reservations.store': { paramsTuple?: []; params?: {} }
+    'reservations.cancel': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
