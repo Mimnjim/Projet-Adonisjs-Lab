@@ -6,5 +6,6 @@ export const createReservationValidator = vine.compile(
     borrower_name: vine.string().trim().minLength(2).maxLength(255),
     start_date: vine.string().trim(),
     end_date: vine.string().trim(),
+    quantity: vine.number().min(1).max(10000),
   })
 )

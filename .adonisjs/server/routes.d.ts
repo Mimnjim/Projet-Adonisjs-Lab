@@ -12,6 +12,7 @@ export type ScannedRoutes = {
     'materials.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'reservations.index': { paramsTuple?: []; params?: {} }
     'reservations.store': { paramsTuple?: []; params?: {} }
+    'reservations.availability': { paramsTuple?: []; params?: {} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
@@ -24,6 +25,7 @@ export type ScannedRoutes = {
     'materials.index': { paramsTuple?: []; params?: {} }
     'materials.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'reservations.index': { paramsTuple?: []; params?: {} }
+    'reservations.availability': { paramsTuple?: []; params?: {} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'dashboard': { paramsTuple?: []; params?: {} }
@@ -33,6 +35,7 @@ export type ScannedRoutes = {
     'materials.index': { paramsTuple?: []; params?: {} }
     'materials.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'reservations.index': { paramsTuple?: []; params?: {} }
+    'reservations.availability': { paramsTuple?: []; params?: {} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'dashboard': { paramsTuple?: []; params?: {} }

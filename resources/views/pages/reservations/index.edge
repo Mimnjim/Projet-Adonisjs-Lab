@@ -28,10 +28,26 @@
         <option value="">Choisir un matériel</option>
         @each (material in materials)
           <option value="{{ material.id }}">
-            {{ material.name }} (quantité disponible : {{ material.quantity }})
+            {{ material.name }}
           </option>
         @endeach
       </select>
+    </div>
+
+    <p id="availability-message">
+      Choisissez un matériel et les dates pour connaître la disponibilité.
+    </p>
+
+    <div>
+      <label for="quantity">Quantité à réserver</label>
+      <input
+        type="number"
+        id="quantity"
+        name="quantity"
+        min="1"
+        value="1"
+        required
+      >
     </div>
 
     <div>
@@ -68,6 +84,7 @@
       @each (reservation in reservations)
         <li>
           Matériel n° {{ reservation.materialId }}
+          — Quantité : {{ reservation.quantity }}
           — Réservé par {{ reservation.borrowerName }}
           — Du {{ reservation.startDate.toISODate() }} au {{ reservation.endDate.toISODate() }}
           — Statut : {{ reservation.status }}
@@ -77,5 +94,94 @@
   @endif
 
   <p><a href="/materials">Retour à la gestion du matériel</a></p>
+
+
+  <script>
+    const materialInput = document.getElementById('material_id')
+    const startDateInput = document.getElementById('start_date')
+    const endDateInput = document.getElementById('end_date')
+    const quantityInput = document.getElementById('quantity')
+    const availabilityMessage = document.getElementById('availability-message')
+
+    async function updateAvailability() {
+      const materialId = materialInput.value
+      const startDate = startDateInput.value
+      const endDate = endDateInput.value
+
+      if (!materialId || !startDate || !endDate) {
+        availabilityMessage.textContent =
+          'Choisissez un matériel et les dates pour connaître la disponibilité.'
+        quantityInput.max = ''
+        quantityInput.disabled = false
+        return
+      }
+
+      if (endDate < startDate) {
+        availabilityMessage.textContent =
+          'La date de fin doit être postérieure ou égale à la date de début.'
+        quantityInput.max = ''
+        quantityInput.disabled = false
+        return
+      }
+
+      try {
+        const params = new URLSearchParams({
+          material_id: materialId,
+          start_date: startDate,
+          end_date: endDate,
+        })
+
+        const response = await fetch(
+          `/reservations/availability?${params.toString()}`
+        )
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          availabilityMessage.textContent =
+            data.message || 'Impossible de vérifier la disponibilité.'
+          quantityInput.max = ''
+          quantityInput.disabled = false
+          return
+        }
+
+        
+        if (data.availableQuantity === 0) {
+          availabilityMessage.textContent =
+            'Aucun exemplaire disponible sur cette période.'
+
+          quantityInput.disabled = true
+          quantityInput.max = ''
+          quantityInput.value = '1'
+          return
+        }
+
+        availabilityMessage.textContent =
+          `Quantité disponible sur cette période : ${data.availableQuantity}`
+
+        quantityInput.disabled = false
+        quantityInput.max = data.availableQuantity
+
+        if (Number(quantityInput.value) > data.availableQuantity) {
+          quantityInput.value = data.availableQuantity
+        }
+
+
+
+      } catch (error) {
+        availabilityMessage.textContent =
+          'Erreur lors de la vérification de la disponibilité.'
+        quantityInput.max = ''
+        quantityInput.disabled = false
+      }
+    }
+
+    materialInput.addEventListener('change', updateAvailability)
+    startDateInput.addEventListener('change', updateAvailability)
+    endDateInput.addEventListener('change', updateAvailability)
+  </script>
+
+
+
 </body>
 </html>

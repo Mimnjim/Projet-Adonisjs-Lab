@@ -27,7 +27,7 @@ export class MaterialSchema extends BaseModel {
 }
 
 export class ReservationSchema extends BaseModel {
-  static $columns = ['borrowerName', 'createdAt', 'endDate', 'id', 'materialId', 'startDate', 'status', 'updatedAt'] as const
+  static $columns = ['borrowerName', 'createdAt', 'endDate', 'id', 'materialId', 'quantity', 'startDate', 'status', 'updatedAt'] as const
   $columns = ReservationSchema.$columns
   @column()
   declare borrowerName: string
@@ -39,6 +39,8 @@ export class ReservationSchema extends BaseModel {
   declare id: number
   @column()
   declare materialId: number
+  @column()
+  declare quantity: number
   @column.date()
   declare startDate: DateTime
   @column()

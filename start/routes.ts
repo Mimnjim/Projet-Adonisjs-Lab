@@ -21,6 +21,10 @@ router.post('/materials/:id/delete', [controllers.Materials, 'destroy'])
 
 router.get('/reservations', [controllers.Reservations, 'index'])
 router.post('/reservations', [controllers.Reservations, 'store'])
+router.get('/reservations/availability', [
+  controllers.Reservations,
+  'availability',
+])
 
 router
   .group(() => {
