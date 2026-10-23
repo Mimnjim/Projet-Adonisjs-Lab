@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html
-  lang="en-us"
+  lang="fr"
   data-theme="{{
     request.plainCookie('app_theme', {
       defaultValue: 'light',
@@ -11,7 +11,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AdonisJS — Starter Kit</title>
+    <title>Gestion du matériel</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('dumper')
   </head>
@@ -21,17 +21,11 @@
         @!logo({ size: 28 })
         <div class="header__right">
           @!themeToggle()
-          @if(auth.user)
-            @link({ route: 'dashboard', class: 'btn btn--primary btn--sm' })
-              Dashboard
-            @end
-          @else
-            @link({ route: 'session.create', class: 'btn btn--ghost btn--sm' })
-              Sign in
-            @end
-            @link({ route: 'new_account.create', class: 'btn btn--primary btn--sm' })
-              Get started
-            @end
+          @link({ route: 'materials.index', class: 'btn btn--ghost btn--sm' })
+            Matériel
+          @end
+          @link({ route: 'reservations.index', class: 'btn btn--primary btn--sm' })
+            Réservations
           @end
         </div>
       </div>

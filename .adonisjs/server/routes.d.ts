@@ -14,12 +14,6 @@ export type ScannedRoutes = {
     'reservations.store': { paramsTuple?: []; params?: {} }
     'reservations.availability': { paramsTuple?: []; params?: {} }
     'reservations.cancel': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'new_account.create': { paramsTuple?: []; params?: {} }
-    'new_account.store': { paramsTuple?: []; params?: {} }
-    'session.create': { paramsTuple?: []; params?: {} }
-    'session.store': { paramsTuple?: []; params?: {} }
-    'dashboard': { paramsTuple?: []; params?: {} }
-    'session.destroy': { paramsTuple?: []; params?: {} }
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
@@ -27,9 +21,6 @@ export type ScannedRoutes = {
     'materials.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'reservations.index': { paramsTuple?: []; params?: {} }
     'reservations.availability': { paramsTuple?: []; params?: {} }
-    'new_account.create': { paramsTuple?: []; params?: {} }
-    'session.create': { paramsTuple?: []; params?: {} }
-    'dashboard': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
@@ -37,9 +28,6 @@ export type ScannedRoutes = {
     'materials.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'reservations.index': { paramsTuple?: []; params?: {} }
     'reservations.availability': { paramsTuple?: []; params?: {} }
-    'new_account.create': { paramsTuple?: []; params?: {} }
-    'session.create': { paramsTuple?: []; params?: {} }
-    'dashboard': { paramsTuple?: []; params?: {} }
   }
   POST: {
     'materials.store': { paramsTuple?: []; params?: {} }
@@ -47,9 +35,6 @@ export type ScannedRoutes = {
     'materials.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'reservations.store': { paramsTuple?: []; params?: {} }
     'reservations.cancel': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'new_account.store': { paramsTuple?: []; params?: {} }
-    'session.store': { paramsTuple?: []; params?: {} }
-    'session.destroy': { paramsTuple?: []; params?: {} }
   }
 }
 declare module '@adonisjs/core/types/http' {
