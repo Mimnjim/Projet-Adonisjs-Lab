@@ -5,17 +5,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Réservation de matériel</title>
+  @vite(['resources/css/reservations-materials.css'])
 </head>
 <body>
   <h1>Réservation de matériel</h1>
-  
-    @if (flashMessages.has('success'))
-    <p>{{ flashMessages.get('success') }}</p>
-    @endif
 
-    @if (flashMessages.has('error'))
-    <p>{{ flashMessages.get('error') }}</p>
-    @endif
+  @if (flashMessages.has('success'))
+    <div class="flash flash-success">
+      {{ flashMessages.get('success') }}
+    </div>
+  @endif
+
+  @if (flashMessages.has('error'))
+    <div class="flash flash-error">
+      {{ flashMessages.get('error') }}
+    </div>
+  @endif
 
   <h2>Nouvelle réservation</h2>
 
@@ -84,27 +89,26 @@
     <ul>
       @each (reservation in reservations)
         <li>
-          Matériel : {{ reservation.material.name }}
-          — Quantité : {{ reservation.quantity }}
-          — Réservé par {{ reservation.borrowerName }}
-          — Du {{ reservation.startDate.toISODate() }} au {{ reservation.endDate.toISODate() }}
-          — Statut : {{ reservation.status }}
+          <div>
+            <strong>{{ reservation.material.name }}</strong>
+            <p style="border:none; padding:0; background:none;">
+              Demandeur : <b>{{ reservation.borrowerName }}</b><br>
+              Quantité : {{ reservation.quantity }}<br>
+              Période : {{ reservation.startDate.toISODate() }} au {{ reservation.endDate.toISODate() }}
+            </p>
+          </div>
 
           @if (reservation.status !== 'cancelled')
-            <form
-              action="/reservations/{{ reservation.id }}/cancel"
-              method="POST"
-            >
+            <form action="/reservations/{{ reservation.id }}/cancel" method="POST">
               {{ csrfField() }}
-              <button
-                type="submit"
-                onclick="return confirm('Voulez-vous vraiment annuler cette réservation ?')"
-              >
+              <button type="submit" onclick="return confirm('Voulez-vous vraiment annuler cette réservation ?')">
                 Annuler la réservation
               </button>
             </form>
           @else
-            <p>Réservation annulée</p>
+            <span style="display:inline-block; font-size:0.8rem; font-weight:600; color:#94a3b8; background:#f1f5f9; padding:4px 8px; border-radius:4px; margin-top:10px;">
+              Annulée
+            </span>
           @endif
         </li>
       @endeach

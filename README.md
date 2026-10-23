@@ -2,48 +2,51 @@
 
 ## Présentation
 
-Application web de gestion et de réservation de matériel développée dans le cadre du projet AdonisJS Lab en troisième année de BUT Métiers du Multimédia et de l'Internet (MMI).
+Ce projet a été réalisé dans le cadre du cours de développement back-end avancé en troisième année de BUT MMI.
 
-L'objectif est de permettre de gérer un inventaire de matériel, de consulter les équipements disponibles et d'enregistrer des réservations sur une période donnée.
+L'idée était de créer une application web permettant de gérer du matériel et de suivre les réservations. On peut ajouter des équipements, modifier leurs informations, consulter les réservations et vérifier si le matériel est disponible pour les dates souhaitées.
+
+Ce projet m'a permis de découvrir plus concrètement le fonctionnement d'AdonisJS et de mettre en pratique les notions vues en cours.
 
 ## Fonctionnalités
 
 ### Gestion du matériel
 
-- Affichage de la liste du matériel enregistré.
-- Ajout d'un matériel avec son nom, sa catégorie, sa description et sa quantité.
-- Modification des informations d'un matériel.
-- Suppression d'un matériel.
-- Validation des données côté serveur avec VineJS.
-- Enregistrement des données dans une base SQLite.
-- Protection contre la suppression d'un matériel possédant des réservations actives.
+- Afficher la liste du matériel enregistré.
+- Ajouter un matériel avec son nom, sa catégorie, sa description et sa quantité.
+- Modifier les informations d'un matériel.
+- Supprimer un matériel, sauf s'il possède encore des réservations actives.
+- Vérifier les données saisies avant de les enregistrer.
+- Stocker les informations dans une base de données SQLite.
 
 ### Réservation de matériel
 
-- Affichage des réservations enregistrées et du matériel associé.
-- Création d'une réservation avec le matériel choisi, le nom du demandeur, les dates de début et de fin et la quantité souhaitée.
-- Vérification de la validité des dates.
-- Calcul de la quantité disponible en fonction du matériel, de la période sélectionnée et des réservations existantes.
-- Prise en compte des chevauchements de dates et exclusion des réservations annulées dans le calcul de disponibilité.
-- Affichage dynamique de la quantité disponible.
-- Désactivation du bouton de réservation lorsqu'aucun exemplaire n'est disponible.
-- Vérification de la disponibilité côté serveur avant l'enregistrement.
-- Attribution du statut `pending` aux nouvelles réservations.
-- Annulation des réservations et mise à jour de leur statut.
-- Messages de confirmation et d'erreur pour informer l'utilisateur.
-- Protection des formulaires contre les requêtes CSRF.
+- Consulter les réservations et le matériel associé.
+- Réserver un matériel en indiquant le nom du demandeur, les dates et la quantité souhaitée.
+- Vérifier que les dates de début et de fin sont cohérentes.
+- Calculer la quantité disponible pour la période choisie.
+- Prendre en compte les réservations qui se chevauchent dans le temps.
+- Ne pas compter les réservations annulées dans le calcul de disponibilité.
+- Afficher la disponibilité directement dans le formulaire.
+- Désactiver le bouton de réservation lorsqu'il n'y a plus de stock disponible.
+- Vérifier une nouvelle fois la disponibilité côté serveur avant d'enregistrer la réservation.
+- Créer les réservations avec le statut `pending` et permettre leur annulation.
+- Afficher des messages pour informer l'utilisateur lorsque son action a réussi ou rencontré une erreur.
+- Protéger les formulaires contre les requêtes CSRF.
 
 ## Technologies utilisées
 
-- **AdonisJS** : framework web utilisé pour la partie serveur.
-- **TypeScript** : langage de programmation utilisé pour développer l'application.
-- **Lucid ORM** : gestion des interactions avec la base de données.
-- **SQLite** : système de base de données.
-- **Edge** : moteur de templates pour générer les pages HTML.
-- **VineJS** : validation des données reçues depuis les formulaires.
-- **Luxon** : manipulation des dates.
-- **JavaScript** : mise à jour dynamique de la disponibilité côté client.
-- **Git et GitHub** : gestion des versions et hébergement du code source.
+- **AdonisJS** : le framework utilisé pour construire l'application.
+- **TypeScript** : utilisé pour écrire le code côté serveur.
+- **Lucid ORM** : permet de communiquer avec la base de données à travers des modèles.
+- **SQLite** : la base de données utilisée pour stocker le matériel et les réservations.
+- **Edge** : utilisé pour créer les pages HTML à partir de templates.
+- **VineJS** : permet de vérifier les données envoyées par les formulaires.
+- **Luxon** : utilisé pour manipuler les dates.
+- **JavaScript** : permet notamment d'actualiser la disponibilité sans avoir à recharger toute la page.
+- **Vite** : utilisé pour gérer les ressources front-end.
+- **HTML / CSS** : utilisés pour structurer les pages et travailler leur présentation.
+- **Git et GitHub** : utilisés pour suivre les modifications et héberger le code du projet.
 
 ## Installation et lancement
 
@@ -68,87 +71,96 @@ npm install
 
 ### 3. Configurer l'environnement
 
-Créer ou compléter le fichier `.env` local avec les variables nécessaires au fonctionnement d'AdonisJS.
+Créer ou compléter le fichier `.env` avec les variables nécessaires au fonctionnement du projet.
 
-Si aucune clé d'application n'est configurée, en générer une avec la commande suivante :
+Si aucune clé d'application n'est configurée, générer une clé avec la commande suivante :
 
 ```bash
 node ace generate:key
 ```
 
-Reporter la clé obtenue dans la variable `APP_KEY` du fichier `.env`.
+Copier la clé obtenue dans la variable `APP_KEY` du fichier `.env`.
 
-Le fichier `.env` ne doit pas être publié sur GitHub, car il peut contenir des informations sensibles.
+Le fichier `.env` doit rester local et ne pas être envoyé sur GitHub, car il peut contenir des informations sensibles.
 
-### 4. Exécuter les migrations
+### 4. Créer les tables de la base de données
 
 ```bash
 node ace migration:run
 ```
 
-Cette commande crée les tables nécessaires dans la base de données selon les migrations du projet.
+Cette commande exécute les migrations du projet pour créer les tables nécessaires.
 
-### 5. Lancer le serveur de développement
+### 5. Lancer l'application
 
 ```bash
 npm run dev
 ```
 
-L'application est accessible à l'adresse suivante :
+L'application est ensuite accessible à l'adresse suivante :
 
-http://localhost:3333
+[http://localhost:3333](http://localhost:3333)
 
 ## Pages principales
 
-- **Accueil** : http://localhost:3333/
-- **Gestion du matériel** : http://localhost:3333/materials
-- **Réservations** : http://localhost:3333/reservations
+- **Accueil** : [http://localhost:3333/](http://localhost:3333/)
+- **Gestion du matériel** : [http://localhost:3333/materials](http://localhost:3333/materials)
+- **Réservations** : [http://localhost:3333/reservations](http://localhost:3333/reservations)
 
 ## Difficultés rencontrées
 
 ### Installation des dépendances
 
-L'installation du projet et de certaines dépendances npm a rencontré des erreurs liées à l'environnement de développement et à la compilation de dépendances natives. Il a fallu installer les outils de compilation nécessaires et adapter la configuration de `node-gyp` pour terminer l'installation.
+Au début du projet, j'ai rencontré plusieurs erreurs lors de l'installation des dépendances npm, notamment avec une dépendance nécessitant une compilation native. J'ai dû installer les outils de compilation nécessaires sous Windows et adapter la configuration de `node-gyp` avant de réussir à terminer l'installation.
+
+Cette étape m'a permis de mieux comprendre que certains problèmes ne viennent pas forcément du code de l'application, mais aussi de l'environnement de développement.
 
 ### Protection CSRF des formulaires
 
-Lors de la mise en place du formulaire d'ajout de matériel, les requêtes étaient rejetées en raison de l'absence du jeton CSRF attendu. L'ajout de `csrfField()` dans les formulaires Edge a permis de résoudre ce problème et de comprendre le rôle de cette protection.
+Lors de la création du formulaire d'ajout de matériel, certaines requêtes étaient rejetées parce que le jeton CSRF attendu était absent. J'ai résolu le problème en ajoutant `csrfField()` dans les formulaires Edge.
+
+J'ai ainsi pu mieux comprendre à quoi sert cette protection et pourquoi il est important de ne pas la négliger.
 
 ### Gestion des dates et des types
 
-Lors de l'enregistrement des réservations, des erreurs TypeScript sont apparues car les dates reçues et validées ne correspondaient pas directement aux types attendus par le modèle. Le travail sur cette erreur a permis de mieux comprendre les conversions de dates et le rôle de Luxon, VineJS et Lucid.
+J'ai également rencontré des erreurs TypeScript lors de l'enregistrement des réservations. Les dates reçues depuis les formulaires ne correspondaient pas directement aux types attendus par le modèle.
+
+J'ai dû travailler sur leur validation et leur conversion, ce qui m'a aidé à mieux comprendre le rôle de VineJS, de Luxon et de Lucid dans le traitement des données.
 
 ### Calcul de la disponibilité
 
-Le calcul du stock disponible nécessitait de prendre en compte les périodes des réservations existantes. Une simple soustraction de toutes les réservations aurait donné un résultat incorrect. Il a donc fallu tenir compte des chevauchements de dates et exclure les réservations annulées pour calculer la disponibilité sur la période choisie.
+C'était l'un des points les plus importants de la logique de réservation. Au départ, il fallait surtout comprendre comment calculer correctement le stock disponible en fonction des dates choisies.
+
+Il ne suffisait pas de soustraire toutes les quantités déjà réservées : deux réservations portant sur des périodes différentes ne mobilisent pas forcément le stock au même moment. J'ai donc dû prendre en compte les chevauchements entre les dates et exclure les réservations annulées pour obtenir une disponibilité cohérente.
 
 ## Utilisation de l'intelligence artificielle
 
-ChatGPT a été utilisé comme outil d'accompagnement pendant le développement pour comprendre le fonctionnement d'AdonisJS, structurer le code, mettre en place les fonctionnalités et résoudre les erreurs rencontrées.
+J'ai utilisé ChatGPT et Gemini à différents moments du projet, principalement pour m'aider à avancer lorsque je rencontrais une difficulté ou que je cherchais à améliorer certains éléments de l'application.
 
-### Avantages
+### ChatGPT : comprendre et développer
 
-- Obtenir des explications sur les différents composants du framework.
-- Avancer étape par étape dans la réalisation des fonctionnalités.
-- Comprendre les messages d'erreur et explorer des solutions.
-- Découvrir les interactions entre les routes, les contrôleurs, les modèles, les validateurs, les vues et la base de données.
+J'ai surtout utilisé ChatGPT pour m'aider à comprendre le fonctionnement d'AdonisJS et les différentes parties du projet. Cela m'a notamment servi à comprendre certaines erreurs, à travailler sur les fonctionnalités et à mieux voir comment les routes, les contrôleurs, les modèles, les validateurs et la base de données fonctionnent ensemble.
 
-### Difficultés et limites
+L'objectif n'était pas simplement de récupérer du code, mais aussi de comprendre ce que je faisais et pourquoi certaines solutions étaient nécessaires.
 
-Les solutions proposées par l'intelligence artificielle ne pouvaient pas toujours être utilisées directement. Certaines nécessitaient des adaptations ou des vérifications pour correspondre à la structure du projet et aux types attendus par AdonisJS.
+### Gemini : travailler le design et le CSS
 
-Il était donc nécessaire de tester les modifications, de lire les erreurs obtenues et de comprendre les solutions avant de poursuivre le développement.
+J'ai utilisé Gemini davantage pour la partie visuelle de l'application, notamment pour trouver des idées de mise en forme et travailler le CSS.
 
-### Ce que j'ai appris
+Cela m'a aidé à améliorer la présentation des pages, des formulaires, des boutons et des messages affichés à l'utilisateur, afin d'obtenir une interface plus cohérente et agréable à utiliser.
 
-Ce projet m'a permis de mieux comprendre la structure d'une application web avec AdonisJS, l'utilisation de Lucid ORM et de VineJS, la gestion des données avec SQLite et le traitement des réservations selon les périodes demandées.
+Les propositions de Gemini ont ensuite été adaptées à mon projet et à la structure de mes pages.
 
-Il m'a également appris à utiliser l'intelligence artificielle comme un outil d'aide au développement, tout en vérifiant et en adaptant les solutions proposées.
+### Ce que j'en retiens
+
+L'intelligence artificielle m'a fait gagner du temps, mais les réponses n'étaient pas toujours directement adaptées à mon code. Il fallait parfois modifier les propositions, vérifier qu'elles fonctionnaient et comprendre les erreurs qui pouvaient apparaître.
+
+J'ai surtout retenu qu'il est utile de s'en servir pour débloquer une situation ou mieux comprendre un concept, à condition de ne pas appliquer aveuglément tout ce qu'elle propose.
 
 ## État du projet
 
 Les principales fonctionnalités de gestion du matériel et de réservation sont implémentées.
 
-L'application permet de gérer le matériel, de créer et d'annuler des réservations et de vérifier la disponibilité des équipements selon les dates et les quantités demandées.
+Il est possible d'ajouter et de modifier du matériel, de créer et d'annuler des réservations et de vérifier la disponibilité des équipements en fonction des dates et des quantités demandées.
 
-Le projet a été développé dans le cadre de l'atelier AdonisJS Lab en BUT MMI.
+Ce projet m'a permis de mieux comprendre le fonctionnement d'une application back-end avec AdonisJS et de mettre en pratique plusieurs notions abordées pendant le cours.

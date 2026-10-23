@@ -10,31 +10,12 @@ export default class ReservationsController {
     const materials = await Material.all()
     const reservations = await Reservation.query().preload('material')
 
-    const materialsWithAvailability = await Promise.all(
-      materials.map(async (material) => {
-        const reservedQuantity = await this.getReservedQuantity(
-          material.id,
-          DateTime.now().toISODate()!,
-          DateTime.now().toISODate()!
-        )
-
-        return {
-          ...material.serialize(),
-          availableQuantity: Math.max(
-            0,
-            material.quantity - reservedQuantity
-          ),
-        }
-      })
-    )
-
     return view.render('pages/reservations/index', {
-      materials: materialsWithAvailability,
+      materials,
       reservations,
     })
+
   }
-
-
 
 
   async store({ request, response, session }: HttpContext) {
@@ -94,7 +75,7 @@ export default class ReservationsController {
     return response.redirect('/reservations')
   }
 
-
+  // Calcule le maximum d'exemplaires réservés en même temps sur la période demandée.
   private async getReservedQuantity(
     materialId: number,
     startDate: string,
@@ -145,7 +126,7 @@ export default class ReservationsController {
 
 
 
-
+  // Vérifie les données reçues, calcule la quantité disponible sur la période demandée et renvoie le résultat au formulaire.
   async availability({ request, response }: HttpContext) {
     const materialId = Number(request.input('material_id'))
     const startDate = request.input('start_date')

@@ -5,18 +5,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestion du matériel</title>
+  @vite(['resources/css/reservations-materials.css'])
 </head>
 <body>
   <h1>Gestion du matériel</h1>
-  @if (flashMessages.has('error'))
-    <div style="padding: 12px; margin: 12px 0; background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; border-radius: 6px;">
-      {{ flashMessages.get('error') }}
+  @if (flashMessages.has('success'))
+    <div class="flash flash-success">
+      {{ flashMessages.get('success') }}
     </div>
   @endif
 
-  @if (flashMessages.has('success'))
-    <div style="padding: 12px; margin: 12px 0; background: #dcfce7; color: #166534; border: 1px solid #86efac; border-radius: 6px;">
-      {{ flashMessages.get('success') }}
+  @if (flashMessages.has('error'))
+    <div class="flash flash-error">
+      {{ flashMessages.get('error') }}
     </div>
   @endif
 
@@ -103,5 +104,9 @@
       @endeach
     </ul>
   @endif
+
+  <p>
+    <a href="/reservations">Accéder aux réservations</a>
+  </p>
 </body>
 </html>
